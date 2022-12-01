@@ -1,0 +1,51 @@
+#ifndef HEADERS_AIKO_PROCESS_H_INCLUDED
+#define HEADERS_AIKO_PROCESS_H_INCLUDED
+
+#include "message_box.h"
+#include "numbers.h"
+
+/** \enum process_type_t
+ * This store type of process.
+ */
+typedef enum {
+    
+    /* Process does not exists */
+    EMPTY = 0x00,
+
+    /* Process will be executed when anybody send something to messagebox */
+    REACTIVE = 0x01,
+
+    /* Process will be execute whenever processor does not doing anything */
+    CONTINUOUS = 0x02,
+
+    /* Process will be execute whenever their signal will be triggered */
+    SIGNAL = 0x03
+
+} process_type_t;
+
+/** \struct process_t
+ * This struct store process.
+ */
+typedef struct {
+    
+    /* This store type of process */
+    process_type_t type;
+
+    /* This store process message box */
+    message_box_t message[1];
+
+    /* This store process worker, process main function */
+    void (*worker)(void *, uint_t, message_box_t *, void *);
+
+    /* This store parameter for process worker */
+    void *parameter;
+
+} process_t;
+
+/** \fn process_create
+ * This create new process in space passed in parameter.
+ * @*process Process to work on
+ */
+void process_create(process_t *process);
+
+#endif
