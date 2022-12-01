@@ -1,3 +1,4 @@
 # Aiko lightweight powerful operating system
 
-## This operating system is under construction!
+## How to use it?
+ * You must add it to project like other C libs. 
