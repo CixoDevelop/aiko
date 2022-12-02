@@ -25,6 +25,15 @@ void kernel_create(kernel_instance_t *kernel, uint_t size) {
     }
 }
 
+/** \fn kernel_remove
+ * This function remove kernel instance and dealocate memory.
+ * @*kernel Kernel instance to work on
+ */
+void kernel_remove(kernel_instance_t *kernel) {
+    kernel->size = 0x00;
+    free(kernel->processes);
+}
+
 /** \fn kernel_signal_scheduler
  * This is scheduler that would run when any signal was triggered.
  * @*kernel Kernel instance to work on

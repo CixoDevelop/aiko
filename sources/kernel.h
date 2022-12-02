@@ -46,6 +46,12 @@ typedef struct {
  */
 void kernel_create(kernel_instance_t *kernel, uint_t size);
 
+/** \fn kernel_remove
+ * This function remove kernel instance and dealocate memory.
+ * @*kernel Kernel instance to work on
+ */
+void kernel_remove(kernel_instance_t *kernel);
+
 /** \fn kernel_scheduler
  * This is main system loop. When You call them, it would not return. Also
  * if it return, that means any error was corrupted.
