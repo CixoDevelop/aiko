@@ -61,6 +61,7 @@ kernel_remove_static(kernel);
 
 
 ## Creating a process
+
 A process is nothing more than a void function that takes as arguments:
  * kernel_instance_t * - The kernel that the process calls
  * kernel_pid_t - ID of the currently running process
@@ -105,6 +106,7 @@ kernel_kill_process(kernel, 0x00);
 
 
 ## How process IDs work
+
 Of course, it's nothing complicated, it's just an individual numeric process 
 label. Only one process with a given ID can exist in the process table, the 
 lower the ID, the higher the priority of the process. If you want to 
@@ -115,6 +117,7 @@ the available process ID and takes as parameters:
 
 
 ## Using signals in the system
+
 Signals is a special process synchronization option. The process will be 
 suspended until the same signal it is waiting for is triggered in the system 
 then each process waiting for such a signal will be executed in turn. Note
@@ -203,11 +206,15 @@ kernel_process_message_box_send
 
 
 ## Other important data
+
 Generally, Aiko uses unsigned int by default, but you can use uint8_t on 
 platforms that have problems when processing larger data. To do this, use 
 the -DAIKO_SHORT_NUMBERS switch during compilation, remember that you must 
 also add it to the compilation of your project and not only to the compilation
 of the library.
 
-## After reading this guide, you should be able to create interesting projects
+
+## Good luck!
+
+After reading this guide, you should be able to create interesting projects 
 with Aiko without any problems!
