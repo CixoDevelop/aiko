@@ -25,6 +25,29 @@ void kernel_create(kernel_instance_t *kernel, uint_t size) {
     }
 }
 
+/** \fn kernel_create_static 
+ * This create kernel, but use static memory instead allocated by maloc.
+ * @*kernel Kernel instance to work on
+ * @*processes Static process table address
+ * @size Size ot process table address
+ */
+void kernel_create_static(
+    kernel_instance_t *kernel, 
+    process_t *processes, 
+    uint_t size
+) {
+    if (size > MAX_PID_VALUE) size = MAX_PID_VALUE;
+
+    kernel->processes = processes;
+    kernel->size = size;
+    kernel->last_changed = ERROR_PID;
+    kernel->signal = 0x00;
+
+    for (kernel_pid_t count = 0x00; count < size; ++count) {
+        process_create(kernel->processes + count);
+    } 
+}
+
 /** \fn kernel_remove
  * This function remove kernel instance and dealocate memory.
  * @*kernel Kernel instance to work on
@@ -32,6 +55,14 @@ void kernel_create(kernel_instance_t *kernel, uint_t size) {
 void kernel_remove(kernel_instance_t *kernel) {
     kernel->size = 0x00;
     free(kernel->processes);
+}
+
+/** \fn kernel_remove_static
+ * This function remove kernel instance created by kernel_create_static.
+ * @*kernel Kernel instance to work on
+ */
+void kernel_remove_static(kernel_instance_t *kernel) {
+    kernel->size = 0x00;
 }
 
 /** \fn kernel_signal_scheduler
@@ -108,6 +139,8 @@ static inline void kernel_marked_scheduler(kernel_instance_t *kernel) {
  */
 void kernel_scheduler(kernel_instance_t *kernel) {
     while (true) {
+        if (kernel->size == 0x00) return;
+
         if (kernel->signal) {
             kernel_signal_scheduler(kernel); 
             continue;

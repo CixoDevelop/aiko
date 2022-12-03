@@ -1,5 +1,5 @@
-#ifndef HEADERS_AIKO_KERNEL_H_INCLUDED
-#define HEADERS_AIKO_KERNEL_H_INCLUDED
+#ifndef AIKO_KERNEL_H_INCLUDED
+#define AIKO_KERNEL_H_INCLUDED
 
 #include "process.h"
 #include "message_box.h"
@@ -46,11 +46,29 @@ typedef struct {
  */
 void kernel_create(kernel_instance_t *kernel, uint_t size);
 
+/** \fn kernel_create_static 
+ * This create kernel, but use static memory instead allocated by maloc.
+ * @*kernel Kernel instance to work on
+ * @*processes Static process table address
+ * @size Size ot process table address
+ */
+void kernel_create_static(
+    kernel_instance_t *kernel, 
+    process_t *processes, 
+    uint_t size
+);
+
 /** \fn kernel_remove
  * This function remove kernel instance and dealocate memory.
  * @*kernel Kernel instance to work on
  */
 void kernel_remove(kernel_instance_t *kernel);
+
+/** \fn kernel_remove_static
+ * This function remove kernel instance created by kernel_create_static.
+ * @*kernel Kernel instance to work on
+ */
+void kernel_remove_static(kernel_instance_t *kernel);
 
 /** \fn kernel_scheduler
  * This is main system loop. When You call them, it would not return. Also
