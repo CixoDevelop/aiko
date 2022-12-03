@@ -7,7 +7,7 @@ LIB=./libaiko.a
 OBJECTS_DIR=./
 
 CC="gcc"
-CC_FLAGS="-Wall -Wextra -Wpedantic -O3"
+CC_FLAGS="-Wall -Wextra -Wpedantic -O3 -std=c99"
 
 AR="ar"
 AR_FLAGS="-cq"
