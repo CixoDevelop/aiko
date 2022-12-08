@@ -118,25 +118,18 @@ the available process ID and takes as parameters:
 
 ## Using signals in the system
 
-Signals is a special process synchronization option. The process will be 
-suspended until the same signal it is waiting for is triggered in the system 
-then each process waiting for such a signal will be executed in turn. Note
-the signal cannot be zero. In order for the process to wait for a signal, give
-it a SIGNAL type, and set as a parameter what the 
-kernel_generate_signal_parameter function returned, which takes as a 
-parameter:
- * uint_t - Signal number
+Signals are a special way of synchronizing processes in the system. You can
+use them to call several processes after some event. They work so that an 
+interrupt or a process triggers a signal, then all SIGNAL processes get a 
+signal number in the mailbox. In the next step, the scheduler will execute 
+them, and thus they will be able to respond. So if you're writing a process 
+to be called after a signal, it's a standard process that verifies with each 
+call that the triggered signal is the one it's waiting for. Verification 
+should take place as soon as possible after the process is called, at the 
+very beginning of the function. Creating a process that waits for a signal 
+might look like this:
 
-
-For example:
-
-kernel_create_process(
-    kernel, 
-    0x00, 
-    SIGNAL, 
-    process, 
-    kernel_generate_signal_parameter(0x20)
-);
+kernel_create_process(kernel, 0x00, SIGNAL, process, NULL);
 
 
 Now to trigger this signal call: kernel_trigger_signal which takes as 

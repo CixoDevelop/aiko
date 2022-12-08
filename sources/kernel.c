@@ -65,28 +65,6 @@ void kernel_remove_static(kernel_instance_t *kernel) {
     kernel->size = 0x00;
 }
 
-/** \fn kernel_signal_scheduler
- * This is scheduler that would run when any signal was triggered.
- * @*kernel Kernel instance to work on
- */
-static inline void kernel_signal_scheduler(kernel_instance_t *kernel) {
-    for (kernel_pid_t count = 0; count < kernel->size; ++count) {
-        process_t *current = kernel->processes + count;
-
-        if (current->type != SIGNAL) continue;
-        if (current->parameter != kernel->signal) continue;
-
-        current->worker(
-            kernel,
-            count,
-            current->message,
-            current->parameter
-        );
-    }
-
-    kernel->signal = 0x00;
-}
-
 /** \fn kernel_standard_scheduler
  * This function run standard scheduler if any process is not marked to 
  * executed.
@@ -98,7 +76,7 @@ static inline void kernel_standard_scheduler(kernel_instance_t *kernel) {
 
         if (current->type == EMPTY) continue;
         if (
-            current->type == REACTIVE && 
+            (current->type == REACTIVE || current->type == SIGNAL) && 
             !message_box_is_readable(current->message)
         ) continue;
             
@@ -141,15 +119,11 @@ void kernel_scheduler(kernel_instance_t *kernel) {
     while (true) {
         if (kernel->size == 0x00) return;
 
-        if (kernel->signal) {
-            kernel_signal_scheduler(kernel); 
-            continue;
-        }
-
         if (kernel->last_changed != ERROR_PID) {
             kernel_marked_scheduler(kernel);      
             continue;
         }
+        
         kernel_standard_scheduler(kernel);        
     }
 }
@@ -217,7 +191,14 @@ void kernel_kill_process(
  * @signal Signal to trigger
  */
 void kernel_trigger_signal(kernel_instance_t *kernel, uint_t signal) {
-    kernel->signal = (void *) ((intptr_t) (signal));
+    void* signal_as_pointer = kernel_generate_signal_parameter(signal);
+
+    for (kernel_pid_t count = 0x00; count < kernel->size; ++count) {
+        if ((kernel->processes + count)->type != SIGNAL) continue;
+        if (!kernel_is_process_message_box_sendable(kernel, count)) continue;
+        
+        kernel_process_message_box_send(kernel, count, signal_as_pointer);
+    }
 }
 
 /** \fn kernel_generate_signal_parameter
