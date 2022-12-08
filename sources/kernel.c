@@ -18,7 +18,6 @@ void kernel_create(kernel_instance_t *kernel, uint_t size) {
     kernel->processes = malloc(sizeof(process_t) * size);
     kernel->size = size;
     kernel->last_changed = ERROR_PID;
-    kernel->signal = 0x00;
 
     for (kernel_pid_t count = 0x00; count < size; ++count) {
         process_create(kernel->processes + count);
@@ -41,7 +40,6 @@ void kernel_create_static(
     kernel->processes = processes;
     kernel->size = size;
     kernel->last_changed = ERROR_PID;
-    kernel->signal = 0x00;
 
     for (kernel_pid_t count = 0x00; count < size; ++count) {
         process_create(kernel->processes + count);

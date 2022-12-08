@@ -28,9 +28,6 @@ typedef struct {
     /* This store address to first element of processes array */
     process_t *processes;
     
-    /* This store signal that is current triggered in ssytem */
-    void *signal;
-
     /* This store size of processes array */
     kernel_pid_t size;
 
