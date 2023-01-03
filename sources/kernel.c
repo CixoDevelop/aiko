@@ -73,10 +73,8 @@ static inline void kernel_standard_scheduler(kernel_instance_t *kernel) {
         process_t *current = kernel->processes + count;
 
         if (current->type == EMPTY) continue;
-        if (
-            (current->type == REACTIVE || current->type == SIGNAL) && 
-            !message_box_is_readable(current->message)
-        ) continue;
+        if (current->type != REACTIVE && current->type != SIGNAL) continue;
+        if (!message_box_is_readable(current->message)) continue;
             
         current->worker(
             kernel,
@@ -193,8 +191,13 @@ void kernel_trigger_signal(kernel_instance_t *kernel, uint_t signal) {
 
     for (kernel_pid_t count = 0x00; count < kernel->size; ++count) {
         if ((kernel->processes + count)->type != SIGNAL) continue;
-        if (!kernel_is_process_message_box_sendable(kernel, count)) continue;
         
+#define FILLED (!kernel_is_process_message_box_sendable(kernel, count))
+#define PROCESS_SIGNAL (kernel_process_message_box_show(kernel, count))
+#define CURRENT_PRIORITY_HIGHER (PROCESS_SIGNAL >= signal_as_pointer)
+
+        if (FILLED && CURRENT_PRIORITY_HIGHER) continue;
+
         kernel_process_message_box_send(kernel, count, signal_as_pointer);
     }
 }
@@ -221,6 +224,21 @@ bool kernel_is_process_message_box_sendable(
     return message_box_is_sendable(
         (kernel->processes + process_pid)->message
     );
+}
+
+/** \fn kernel_process_message_box_show
+ * This function show value in message box for process which have specified 
+ * process id
+ * @*kernel Kernel instance to work on
+ * @process_pid Pid of process to show
+ */
+void* kernel_process_message_box_show(
+    kernel_instance_t *kernel, 
+    kernel_pid_t process_pid
+) {
+    if (process_pid >= kernel->size) return 0x00;
+
+    return message_box_show((kernel->processes + process_pid)->message);
 }
 
 /** \fn kernel_process_message_box_send

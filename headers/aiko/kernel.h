@@ -140,4 +140,15 @@ void kernel_process_message_box_send(
     void *message
 );
 
+/** \fn kernel_process_message_box_show
+ * This function show value in message box for process which have specified 
+ * process id
+ * @*kernel Kernel instance to work on
+ * @process_pid Pid of process to show
+ */
+void* kernel_process_message_box_show(
+    kernel_instance_t *kernel, 
+    kernel_pid_t process_pid
+);
+
 #endif

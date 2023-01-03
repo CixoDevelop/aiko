@@ -38,6 +38,14 @@ void message_box_send(message_box_t *box, void *data) {
     box->message = data;
 }
 
+/** \fn message_box_show
+ * This function return info which is save in message box.
+ * @*box Message box to work on
+ */
+void* message_box_show(message_box_t *box) {
+    return box->message;
+}
+
 /** \fn message_box_receive 
  * This function receive data from message box.
  * @*box Message box to work on

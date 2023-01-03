@@ -1,5 +1,5 @@
-#ifndef AIKO_MESSAGE_BOX_H_INCLUDED
-#define AIKO_MESSAGE_BOX_H_INCLUDED
+#ifndef HEADERS_AIKO_MESSAGE_BOX_H_INCLUDED
+#define HEADERS_AIKO_MESSAGE_BOX_H_INCLUDED
 
 #include <stdbool.h>
 
@@ -43,6 +43,12 @@ bool message_box_is_sendable(message_box_t *box);
  */
 void message_box_send(message_box_t *box, void *data);
 
+/** \fn message_box_show
+ * This function return info which is save in message box.
+ * @*box Message box to work on
+ */
+void* message_box_show(message_box_t *box);
+ 
 /** \fn message_box_receive 
  * This function receive data from message box.
  * @*box Message box to work on
