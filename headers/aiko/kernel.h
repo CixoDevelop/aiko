@@ -105,7 +105,7 @@ void kernel_create_process(
     kernel_instance_t *kernel,
     kernel_pid_t process_pid,
     process_type_t type,
-    void (*worker)(kernel_instance_t *, kernel_pid_t, message_box_t *, void *),
+    void (*worker)(kernel_instance_t *, process_t *),
     void *parameter
 );
 

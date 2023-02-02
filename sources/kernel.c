@@ -66,7 +66,7 @@ void kernel_remove_static(kernel_instance_t *kernel) {
 /** \fn kernel_standard_scheduler
  * This function run standard scheduler if any process is not marked to 
  * executed.
- * @*kernek Kernek instance to work on
+ * @*kernel Kernel instance to work on
  */
 static inline void kernel_standard_scheduler(kernel_instance_t *kernel) {
     for (kernel_pid_t count = 0; count < kernel->size; ++count) {
@@ -76,12 +76,7 @@ static inline void kernel_standard_scheduler(kernel_instance_t *kernel) {
         if (current->type != REACTIVE && current->type != SIGNAL) continue;
         if (!message_box_is_readable(current->message)) continue;
             
-        current->worker(
-            kernel,
-            count,
-            current->message,
-            current->parameter
-        );
+        current->worker(kernel, current);
     }
 }
 
@@ -98,12 +93,7 @@ static inline void kernel_marked_scheduler(kernel_instance_t *kernel) {
 
     if (current->type == EMPTY) return;
 
-    current->worker(
-        kernel, 
-        last_changed, 
-        current->message, 
-        current->parameter
-    );
+    current->worker(kernel, current);
 }
 
 /** \fn kernel_scheduler
@@ -148,7 +138,7 @@ void kernel_create_process(
     kernel_instance_t *kernel,
     kernel_pid_t process_pid,
     process_type_t type,
-    void (*worker)(kernel_instance_t *, kernel_pid_t, message_box_t *, void *),
+    void (*worker)(kernel_instance_t *, process_t *),
     void *parameter
 ) {
     if (process_pid >= kernel->size) return;
@@ -160,9 +150,7 @@ void kernel_create_process(
     process->type = type;
     process->parameter = parameter;
     
-    process->worker = (
-        void (*)(void *, uint_t, message_box_t *, void *)
-    ) (worker);
+    process->worker = (void (*)(void *, void *)) (worker);
 
     if (type == CONTINUOUS) kernel->last_changed = process_pid;
 }

@@ -1,5 +1,5 @@
-#ifndef AIKO_PROCESS_H_INCLUDED
-#define AIKO_PROCESS_H_INCLUDED
+#ifndef HEADERS_AIKO_PROCESS_H_INCLUDED
+#define HEADERS_AIKO_PROCESS_H_INCLUDED
 
 #include "message_box.h"
 #include "numbers.h"
@@ -35,7 +35,7 @@ typedef struct {
     message_box_t message[1];
 
     /* This store process worker, process main function */
-    void (*worker)(void *, uint_t, message_box_t *, void *);
+    void (*worker)(void *, void *);
 
     /* This store parameter for process worker */
     void *parameter;

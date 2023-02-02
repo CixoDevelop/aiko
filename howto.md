@@ -64,17 +64,13 @@ kernel_remove_static(kernel);
 
 A process is nothing more than a void function that takes as arguments:
  * kernel_instance_t * - The kernel that the process calls
- * kernel_pid_t - ID of the currently running process
- * message_box_t * - Box of the currently running process
- * void * - The parameter that was passed when creating the process
+ * process_t * - Pointer to current process
 
 So, create a function, for example:
 
 void process(
     kernel_instance_t *kernel, 
-    kernel_pid_d pid, 
-    message_box_t *message, 
-    void *parameter
+    process_t *process
 ) {
 }
 

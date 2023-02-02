@@ -35,7 +35,7 @@ typedef struct {
     message_box_t message[1];
 
     /* This store process worker, process main function */
-    void (*worker)(void *, uint_t, message_box_t *, void *);
+    void (*worker)(void *, void *);
 
     /* This store parameter for process worker */
     void *parameter;
