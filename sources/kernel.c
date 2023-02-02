@@ -73,8 +73,10 @@ static inline void kernel_standard_scheduler(kernel_instance_t *kernel) {
         process_t *current = kernel->processes + count;
 
         if (current->type == EMPTY) continue;
-        if (current->type != REACTIVE && current->type != SIGNAL) continue;
-        if (!message_box_is_readable(current->message)) continue;
+        if (
+            current->type != CONTINUOUS &&
+            !message_box_is_readable(current->message)
+        ) continue;
             
         current->worker(kernel, current);
     }
