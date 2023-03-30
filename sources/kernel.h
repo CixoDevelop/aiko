@@ -87,6 +87,15 @@ kernel_pid_t kernel_get_empty_pid(kernel_instance_t *kernel);
  */
 void kernel_trigger_signal(kernel_instance_t *kernel, uint_t signal);
 
+/** \fn kernel_sum_signal
+ * This function logical sum current send signal, and new signal, then project
+ * can use all of bits as diferent signals, and then all of it can be 
+ * tiggered in same time without overwrite.
+ * @*kernel Kernel instance to work on
+ * @signal Signal to add
+ */
+void kernel_sum_signal(kernel_instance_t *kernel, uint_t new_signal);
+ 
 /** \fn kernel_generate_signal_parameter
  * This generate param for process from signal.
  * @signal Signal to generate from

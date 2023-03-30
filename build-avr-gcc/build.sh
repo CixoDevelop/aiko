@@ -9,7 +9,7 @@ OBJECTS_DIR=./
 CC="avr-gcc"
 CC_FLAGS="-Wall -Wextra -Wpedantic -Os -std=c99 -fearly-inlining \
     -fshort-enums -Wl,--gc-sections -fdata-sections \
-    -ffunction-sections -DAIKO_SHORT_NUMBERS"
+    -ffunction-sections -DAIKO_SHORT_NUMBERS -mmcu=atmega8"
 
 AR="avr-ar"
 AR_FLAGS="-cq"

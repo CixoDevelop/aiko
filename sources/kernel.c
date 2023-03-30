@@ -192,6 +192,37 @@ void kernel_trigger_signal(kernel_instance_t *kernel, uint_t signal) {
     }
 }
 
+/** \fn kernel_sum_signal
+ * This function logical sum current send signal, and new signal, then project
+ * can use all of bits as diferent signals, and then all of it can be 
+ * tiggered in same time without overwrite.
+ * @*kernel Kernel instance to work on
+ * @signal Signal to add
+ */
+void kernel_sum_signal(kernel_instance_t *kernel, uint_t new_signal) {
+    void* signal_to_add = kernel_generate_signal_parameter(new_signal);
+
+    for (kernel_pid_t count = 0x00; count < kernel->size; ++count) {
+        if ((kernel->processes + count)->type != SIGNAL) continue;
+        
+        if (kernel_is_process_message_box_sendable(kernel, count)) {
+            kernel_process_message_box_send(kernel, count, signal_to_add);
+            continue;
+        }
+
+        uintptr_t compared_signal = (uintptr_t)signal_to_add;
+        compared_signal |= (uintptr_t)(
+            kernel_process_message_box_show(kernel, count)
+        );
+
+        kernel_process_message_box_send(
+            kernel, 
+            count, 
+            (void*)compared_signal
+        );
+    }
+}
+
 /** \fn kernel_generate_signal_parameter
  * This generate param for process from signal.
  * @signal Signal to generate from
