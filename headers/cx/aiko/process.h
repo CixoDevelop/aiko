@@ -1,3 +1,13 @@
+/*
+ * This project is Aiko, an operating system for weak devices like 
+ * microcontrollers. It has support for devices based on eight-bit 
+ * architectures. It is suitable even for devices with only 128 bytes 
+ * of operational memory. You can make it easier to code your projects 
+ * based on such platforms by using Aiko as a scheduler.
+ *
+ * Author: Cixo
+ */
+
 #ifndef HEADERS_AIKO_PROCESS_H_INCLUDED
 #define HEADERS_AIKO_PROCESS_H_INCLUDED
 
@@ -44,7 +54,7 @@ typedef struct {
 
 /** \fn process_create
  * This create new process in space passed in parameter.
- * @*process Process to work on
+ * @param *process Process to work on
  */
 void process_create(process_t *process);
 

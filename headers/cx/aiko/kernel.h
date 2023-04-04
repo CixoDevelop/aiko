@@ -1,5 +1,15 @@
-#ifndef AIKO_KERNEL_H_INCLUDED
-#define AIKO_KERNEL_H_INCLUDED
+/*
+ * This project is Aiko, an operating system for weak devices like 
+ * microcontrollers. It has support for devices based on eight-bit 
+ * architectures. It is suitable even for devices with only 128 bytes 
+ * of operational memory. You can make it easier to code your projects 
+ * based on such platforms by using Aiko as a scheduler.
+ *
+ * Author: Cixo
+ */
+
+#ifndef CX_AIKO_KERNEL_H_INCLUDED
+#define CX_AIKO_KERNEL_H_INCLUDED
 
 #include "process.h"
 #include "message_box.h"
@@ -38,16 +48,16 @@ typedef struct {
 
 /** \fn kernel_create 
  * This create instance of kernel.
- * @*kernel Kernel instance to work on
- * @size Size of processes array
+ * @param *kernel Kernel instance to work on
+ * @paran size Size of processes array
  */
 void kernel_create(kernel_instance_t *kernel, uint_t size);
 
 /** \fn kernel_create_static 
  * This create kernel, but use static memory instead allocated by maloc.
- * @*kernel Kernel instance to work on
- * @*processes Static process table address
- * @size Size ot process table address
+ * @param *kernel Kernel instance to work on
+ * @param *processes Static process table address
+ * @param size Size ot process table address
  */
 void kernel_create_static(
     kernel_instance_t *kernel, 
@@ -57,58 +67,53 @@ void kernel_create_static(
 
 /** \fn kernel_remove
  * This function remove kernel instance and dealocate memory.
- * @*kernel Kernel instance to work on
+ * @param *kernel Kernel instance to work on
  */
 void kernel_remove(kernel_instance_t *kernel);
 
 /** \fn kernel_remove_static
  * This function remove kernel instance created by kernel_create_static.
- * @*kernel Kernel instance to work on
+ * @param *kernel Kernel instance to work on
  */
 void kernel_remove_static(kernel_instance_t *kernel);
 
 /** \fn kernel_scheduler
  * This is main system loop. When You call them, it would not return. Also
  * if it return, that means any error was corrupted.
- * @*kernel Kernel instance to work on
+ * @param *kernel Kernel instance to work on
  */
 void kernel_scheduler(kernel_instance_t *kernel);
 
 /** \fn kernel_get_empty_pid
  * This function search and return first empty pid in array.
- * @*kernel Kernel instance to work on
+ * @param *kernel Kernel instance to work on
+ * @return Empty pid for new process
  */
 kernel_pid_t kernel_get_empty_pid(kernel_instance_t *kernel);
 
 /** \fn kernel_trigger_signal
  * This function trigger signal in operating system.
- * @*kernel Kernel instance to work on
- * @signal Signal to trigger
+ * @param *kernel Kernel instance to work on
+ * @param signal Signal to trigger
  */
-void kernel_trigger_signal(kernel_instance_t *kernel, uint_t signal);
+void kernel_trigger_signal(kernel_instance_t *kernel, uintptr_t signal);
 
 /** \fn kernel_sum_signal
  * This function logical sum current send signal, and new signal, then project
  * can use all of bits as diferent signals, and then all of it can be 
  * tiggered in same time without overwrite.
- * @*kernel Kernel instance to work on
- * @signal Signal to add
+ * @param *kernel Kernel instance to work on
+ * @param signal Signal to add
  */
-void kernel_sum_signal(kernel_instance_t *kernel, uint_t new_signal);
+void kernel_sum_signal(kernel_instance_t *kernel, uintptr_t new_signal);
  
-/** \fn kernel_generate_signal_parameter
- * This generate param for process from signal.
- * @signal Signal to generate from
- */
-void* kernel_generate_signal_parameter(uint_t signal);
-
 /** \fn kernel_create_process
  * This will create new process in system from given params.
- * @*kernel Kernel instance to work on
- * @process_pid Pid of new process
- * @type Type of new process
- * @(*worker)(...) Process worker, process main function
- * @*parameter Parameter to worker
+ * @param *kernel Kernel instance to work on
+ * @param process_pid Pid of new process
+ * @param type Type of new process
+ * @param (*worker)(...) Process worker, process main function
+ * @param *parameter Parameter to worker
  */
 void kernel_create_process(
     kernel_instance_t *kernel,
@@ -120,8 +125,8 @@ void kernel_create_process(
 
 /** \fn kernel_kill_process
  * This function kill process which given pid.
- * @*kernel Kernel instance to work on
- * @process_pid Pid of process to kill
+ * @param *kernel Kernel instance to work on
+ * @param process_pid Pid of process to kill
  */
 void kernel_kill_process(
     kernel_instance_t *kernel,
@@ -130,8 +135,9 @@ void kernel_kill_process(
 
 /** \fn kernel_is_process_message_box_sendable
  * This function check if process message box is ready to receive new data.
- * @*kernel Kernel instance to work on
- * @process_pid Pid of process to check
+ * @param *kernel Kernel instance to work on
+ * @param process_pid Pid of process to check
+ * @return This return process message box state
  */
 bool kernel_is_process_message_box_sendable(
     kernel_instance_t *kernel,
@@ -140,8 +146,9 @@ bool kernel_is_process_message_box_sendable(
 
 /** \fn kernel_process_message_box_send
  * This function send data to message box of process with given pid.
- * @*kernel Kernel instance to work on
- * @process_pid Pid of process to check
+ * @param *kernel Kernel instance to work on
+ * @param process_pid Pid of process to send
+ * @param *data Data to send
  */
 void kernel_process_message_box_send(
     kernel_instance_t *kernel,
@@ -152,8 +159,9 @@ void kernel_process_message_box_send(
 /** \fn kernel_process_message_box_show
  * This function show value in message box for process which have specified 
  * process id
- * @*kernel Kernel instance to work on
- * @process_pid Pid of process to show
+ * @param *kernel Kernel instance to work on
+ * @param process_pid Pid of process to show
+ * @return Current content of process message box
  */
 void* kernel_process_message_box_show(
     kernel_instance_t *kernel, 

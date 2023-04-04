@@ -24,6 +24,8 @@ First, include the header files:
  * aiko/kernel.h - Imports kernel functions and kernel structure only.
  * aiko/message_box.h - Imports the structure and functions needed for 
    the box to work.
+All above files default is in cx/ namespace. You can remove it from cx/
+with add source with cx/ to gcc command.
 
 
 Then it's downhill, you will need the kernel structure:

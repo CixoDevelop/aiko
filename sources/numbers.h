@@ -1,5 +1,15 @@
-#ifndef HEADERS_AIKO_NUMBERS_H_INCLUDED
-#define HEADERS_AIKO_NUMBERS_H_INCLUDED
+/*
+ * This project is Aiko, an operating system for weak devices like 
+ * microcontrollers. It has support for devices based on eight-bit 
+ * architectures. It is suitable even for devices with only 128 bytes 
+ * of operational memory. You can make it easier to code your projects 
+ * based on such platforms by using Aiko as a scheduler.
+ *
+ * Author: Cixo
+ */
+
+#ifndef CX_AIKO_NUMBERS_H_INCLUDED
+#define CX_AIKO_NUMBERS_H_INCLUDED
 
 /** \def AIKO_SHORT_NUMBERS
  * If Yoy want to use aiko on small embedded which 8 bit architecture, you can
