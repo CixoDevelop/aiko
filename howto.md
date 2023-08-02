@@ -30,10 +30,10 @@ with add source with cx/ to gcc command.
 
 Then it's downhill, you will need the kernel structure:
 
-// To reference items with "&" and items with "."
-kernel_instance_t kernel;
-// To refer by name and items by "->"
-kernel_instance_t kernel[1];
+// To reference items with "&" and items with "."  
+kernel_instance_t kernel;  
+// To refer by name and items by "->"  
+kernel_instance_t kernel[1];  
 
 
 The kernel exists from initialization until deletion. You can initialize the 
@@ -45,21 +45,21 @@ implement malloc in your environment.
 
 Dynamic initialization:
 
-// The kernel does not exist yet
-kernel_create(kernel, 10 /* process table size */); // Or &
-// The kernel exists, you can add processes and run it
-kernel_remove(kernel);
-// The kernel has been removed and is no longer usable unless reinitialized
+// The kernel does not exist yet  
+kernel_create(kernel, 10 /* process table size */); // Or &  
+// The kernel exists, you can add processes and run it  
+kernel_remove(kernel);  
+// The kernel has been removed and is no longer usable unless reinitialized  
 
 
 Static initialization:
 
-// The kernel does not exist yet
-process_t processes[10 /* Array size */];
-kernel_create_static(kernel, processes, 10 /* process table size */); // Or &
-// The kernel exists, you can add processes and run it
-kernel_remove_static(kernel);
-// The kernel has been removed and is no longer usable unless reinitialized
+// The kernel does not exist yet  
+process_t processes[10 /* Array size */];  
+kernel_create_static(kernel, processes, 10 /* process table size */); // Or &  
+// The kernel exists, you can add processes and run it  
+kernel_remove_static(kernel);  
+// The kernel has been removed and is no longer usable unless reinitialized  
 
 
 ## Creating a process
@@ -70,10 +70,10 @@ A process is nothing more than a void function that takes as arguments:
 
 So, create a function, for example:
 
-void process(
-    kernel_instance_t *kernel, 
-    process_t *process
-) {
+void process(  
+    kernel_instance_t *kernel,   
+    process_t *process  
+) {  
 }
 
 
@@ -89,7 +89,7 @@ following parameters:
 
 For example:
 
-kernel_create_process(kernel, 0x00, REACTIVE, process, NULL);
+kernel_create_process(kernel, 0x00, REACTIVE, process, NULL);  
 
 
 Now you have a single process waiting for data in the inbox.
@@ -100,7 +100,7 @@ kernel_kill_process command, which takes the following parameters:
  * kernel_instance_t * - The instance from which the process will be removed
  * kernel_pid_t - ID of the process to be removed
 For example:
-kernel_kill_process(kernel, 0x00);
+kernel_kill_process(kernel, 0x00);  
 
 
 ## How process IDs work
@@ -127,7 +127,7 @@ should take place as soon as possible after the process is called, at the
 very beginning of the function. Creating a process that waits for a signal 
 might look like this:
 
-kernel_create_process(kernel, 0x00, SIGNAL, process, NULL);
+kernel_create_process(kernel, 0x00, SIGNAL, process, NULL);  
 
 
 Now to trigger this signal call: kernel_trigger_signal which takes as 
